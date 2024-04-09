@@ -43,35 +43,35 @@ bool Connect4Game::checkWin() const {
             if (cell == EMPTY) continue; // Skips checking empty cells
 
             // Horizontal check
-            if (col + 3 < COLUMNS && // Checks for horizontal win condition within bounds
-                cell == board[row][col + 1] && // Next cell horizontally matches current cell
-                cell == board[row][col + 2] && // Two cells over horizontally matches
-                cell == board[row][col + 3]) { // Three cells over horizontally matches
-                return true; // A win is found
+            if ((col + 3 & COLUMNS - 1) == col + 3 && // Ensures col + 3 doesn't overflow using bitwise AND
+                cell == board[row][col + 1] &&
+                cell == board[row][col + 2] &&
+                cell == board[row][col + 3]) {
+                return true;
             }
 
             // Vertical check
-            if (row + 3 < ROWS && // Checks for vertical win condition within bounds
-                cell == board[row + 1][col] && // Next cell vertically matches current cell
-                cell == board[row + 2][col] && // Two cells over vertically matches
-                cell == board[row + 3][col]) { // Three cells over vertically matches
-                return true; // A win is found
+            if ((row + 3 & ROWS - 1) == row + 3 && // Ensures row + 3 doesn't overflow using bitwise AND
+                cell == board[row + 1][col] &&
+                cell == board[row + 2][col] &&
+                cell == board[row + 3][col]) {
+                return true;
             }
 
             // Diagonal (down-right) check
-            if (row + 3 < ROWS && col + 3 < COLUMNS && // Checks for diagonal win condition within bounds
-                cell == board[row + 1][col + 1] && // Next cell diagonally down-right matches
-                cell == board[row + 2][col + 2] && // Two cells over diagonally down-right matches
-                cell == board[row + 3][col + 3]) { // Three cells over diagonally down-right matches
-                return true; // A win is found
+            if ((row + 3 & ROWS - 1) == row + 3 && (col + 3 & COLUMNS - 1) == col + 3 && // Ensures bounds check within array limits
+                cell == board[row + 1][col + 1] &&
+                cell == board[row + 2][col + 2] &&
+                cell == board[row + 3][col + 3]) {
+                return true;
             }
 
             // Diagonal (up-right) check
-            if (row >= 3 && col + 3 < COLUMNS && // Checks for diagonal win condition within bounds going up-right
-                cell == board[row - 1][col + 1] && // Next cell diagonally up-right matches
-                cell == board[row - 2][col + 2] && // Two cells over diagonally up-right matches
-                cell == board[row - 3][col + 3]) { // Three cells over diagonally up-right matches
-                return true; // A win is found
+            if (int(row - 3) >= 0 && (col + 3 & COLUMNS - 1) == col + 3 && // Ensures row is not underflowing and col + 3 is within bounds
+                cell == board[row - 1][col + 1] &&
+                cell == board[row - 2][col + 2] &&
+                cell == board[row - 3][col + 3]) {
+                return true;
             }
         }
     }
